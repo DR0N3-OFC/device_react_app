@@ -1,8 +1,12 @@
-import { Route, Routes } from 'react-router-dom';
-import Home from './componentes/Home';
-import NotFound from './componentes/NotFound';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import NotFound from "./pages/NotFound";
+import GatewayPage from "./pages/GatewayPage";
+import GatewayDetails from "./pages/GatewayDetails";
+import DeviceDetails from "./pages/DeviceDetails";
+
 
 const AppRoutes = () => {
   return (
@@ -10,6 +14,9 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/gateways" element={<GatewayPage />} />
+        <Route path="/gateway/:id" element={<GatewayDetails />} />
+        <Route path="/device/:id" element={<DeviceDetails />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
   );

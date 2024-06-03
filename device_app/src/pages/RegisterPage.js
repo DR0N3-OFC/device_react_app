@@ -1,24 +1,124 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useReducer, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { API } from '../Const';
 
-const RegisterPage = ({ onRegister }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const URL = `${API}/users`;
 
-  const handleRegister = () => {
-    // Aqui você pode adicionar a lógica de registro, como enviar os dados para o servidor
-    // Por enquanto, apenas simularemos um registro bem-sucedido
-    const newUser = { name, email, password };
-    onRegister(newUser);
-  };
+const RegisterPage = () => {
+    const nav = useNavigate();
+
+    const [submitting, setSubmitting] = useState(false);
+  
+    const formReducer = (state, event) => {
+      if (event.reset) {
+        return {
+          first_name: '',
+          last_name: '',
+          email: ''
+        }
+      }
+  
+      return {
+        ...state,
+        [event.name]: event.value
+      }
+    }
+  
+    const [formData, setFormData] = useReducer(formReducer, {
+      first_name: '',
+      last_name: '',
+      email: ''
+    });
+  
+  
+    const handleChange = event => {
+      const isCheckbox = event.target.type === 'checkbox';
+      setFormData({
+        name: event.target.name,
+        value: isCheckbox ? event.target.checked : event.target.value,
+      });
+    }
+  
+    const handleSave = event => {
+      console.log(event);
+      console.log(formData)
+      event.preventDefault();
+  
+      setSubmitting(true);
+  
+  
+      axios.post(URL, formData)
+        .then((res) => {
+          console.log(res);
+  
+          setFormData({
+            reset: true
+          });
+  
+          alert("Sucesso ao salvar!");
+        })
+        .catch(err => {
+          console.log(err);
+          alert("Falha ao salvar!");
+        }).finally(() => {
+          setSubmitting(false);
+        });
+    };
 
   return (
     <div>
       <h2>Registro</h2>
-      <input type="text" placeholder="Nome" value={name} onChange={(e) => setName(e.target.value)} />
-      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <button onClick={handleRegister}>Registrar</button>
+      <form onSubmit={handleSave}>
+        <fieldset className="form-group" disabled={submitting}>
+          <label>Primeiro nome</label>
+          <input 
+            type="text" 
+            name="first_name" 
+            className="form-control" 
+            placeholder="Fulano" 
+            onChange={handleChange} 
+            value={formData.first_name || ''} 
+            required
+          />
+        </fieldset>
+
+        <fieldset className="form-group" disabled={submitting}>
+          <label>Sobrenome</label>
+          <input 
+            type="text" 
+            name="last_name" 
+            className="form-control" 
+            placeholder="Silva" 
+            onChange={handleChange} 
+            value={formData.last_name || ''}
+            required 
+          />
+        </fieldset>
+
+        <fieldset className="form-group" disabled={submitting}>
+          <label>E-mail</label>
+          <input 
+            type="email" 
+            name="email" 
+            className="form-control" 
+            placeholder="email@example.com" 
+            onChange={handleChange} 
+            value={formData.email || ''} 
+            required
+          />
+        </fieldset>
+
+        <div className="mt-2">
+          <button type="submit" className="btn btn-success me-1" style={{ minWidth: '100px' }} disabled={submitting}>
+            <i className="fas fa-check-circle"></i> Salvar
+          </button>
+
+          <button className="btn btn-light" style={{ minWidth: '100px' }} onClick={() => nav('/user')} disabled={submitting}>
+            <i className="fas fa-times-circle"></i> Cancelar
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
