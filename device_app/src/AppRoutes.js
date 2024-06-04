@@ -3,10 +3,10 @@ import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import NotFound from "./pages/NotFound";
-import GatewayPage from "./pages/GatewayPage";
-import GatewayDetails from "./pages/GatewayDetails";
-import DeviceDetails from "./pages/DeviceDetails";
-import DevicePage from "./pages/DevicePage";
+import GatewayPage from "./pages/Gateway/GatewayPage";
+import GatewayDetails from "./pages/Gateway/GatewayDetails";
+import DeviceDetails from "./pages/Device/DeviceDetails";
+import DevicePage from "./pages/Device/DevicePage";
 
 
 const AppRoutes = () => {

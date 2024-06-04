@@ -1,8 +1,8 @@
 import React from 'react';
-import DeviceList from '../components/Device/DeviceList';
-import DeviceForm from '../components/Device/DeviceForm';
+import DeviceList from '../../components/Device/DeviceList';
+import DeviceForm from '../../components/Device/DeviceForm';
 import axios from 'axios';
-import { API } from '../Const';
+import { API } from '../../Const';
 
 const DevicePage = () => {
   const handleSubmit = formData => {

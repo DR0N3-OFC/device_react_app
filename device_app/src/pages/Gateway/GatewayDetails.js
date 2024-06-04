@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import DeviceList from '../components/Device/DeviceList';
+import DeviceList from '../../components/Device/DeviceList';
 import { useParams } from 'react-router-dom';
-import { API } from '../Const';
+import { API } from '../../Const';
 
 const GatewayDetails = () => {
   const { id } = useParams();
@@ -12,7 +12,6 @@ const GatewayDetails = () => {
     // Faça uma solicitação para obter a lista de gateways do servidor
     axios.get(`${API}/gateway/${id}`)
       .then(response => {
-        console.log(response.data)
         setGateway(response.data);
       })
       .catch(error => {

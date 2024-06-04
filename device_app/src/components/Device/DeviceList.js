@@ -10,7 +10,6 @@ const GatewayList = () => {
     // Faça uma solicitação para obter a lista de devices do servidor
     axios.get(`${API}/dispositivo`)
       .then(response => {
-        console.log(response.data)
         setDevices(response.data);
       })
       .catch(error => {
