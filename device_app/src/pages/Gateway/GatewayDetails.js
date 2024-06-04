@@ -6,7 +6,7 @@ import { API } from '../../Const';
 
 const GatewayDetails = () => {
   const { id } = useParams();
-  const [gateway, setGateway] = useState([]);
+  const [gateway, setGateway] = useState({});
 
   useEffect(() => {
     // Faça uma solicitação para obter a lista de gateways do servidor
@@ -20,16 +20,22 @@ const GatewayDetails = () => {
   }, [id]);
 
   return (
-    <>
-      <div>
-        <h1>Detalhes do Gateway</h1>
-        <p>ID: {gateway.gateway_id}</p>
-        <p>Nome: {gateway.nome}</p>
-        <p>Descrição: {gateway.descricao}</p>
-        <p>Endereço: {gateway.endereco}</p>
+    <div className="container mt-4">
+      <div className="card">
+        <div className="card-header">
+          <h1>Detalhes do Gateway</h1>
+        </div>
+        <div className="card-body">
+          <p><strong>ID:</strong> {id}</p>
+          <p><strong>Nome:</strong> {gateway.nome}</p>
+          <p><strong>Descrição:</strong> {gateway.descricao}</p>
+          <p><strong>Endereço:</strong> {gateway.endereco}</p>
+        </div>
       </div>
-      <DeviceList />
-    </>
+      <div className="mt-4">
+        <DeviceList />
+      </div>
+    </div>
   );
 };
 

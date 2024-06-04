@@ -38,51 +38,59 @@ const LoginPage = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <fieldset className="form-group" disabled={submitting}>
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        className="form-control"
-                        placeholder="email@example.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </fieldset>
-
-                <fieldset className="form-group" disabled={submitting}>
-                    <label>Senha</label>
-                    <input
-                        type="password"
-                        name="password"
-                        className="form-control"
-                        placeholder="********"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </fieldset>
-
-                {error && <div className="alert alert-danger">{error}</div>}
-
-                <div className="mt-2">
-                    <button type="submit" className="btn btn-success me-1" disabled={submitting}>
-                        {submitting ? 'Aguarde...' : 'Login'}
-                    </button>
-
-                    <button
-                        className="btn btn-light"
-                        onClick={() => navigate('/')}
-                        disabled={submitting}
-                    >
-                        Cancelar
-                    </button>
+        <div className="container mt-4">
+            <div className="card">
+                <div className="card-header">
+                    <h2>Login</h2>
                 </div>
-            </form>
+                <div className="card-body">
+                    <form onSubmit={handleSubmit}>
+                        <fieldset className="form-group mb-3" disabled={submitting}>
+                            <label htmlFor="email" className="form-label">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                className="form-control"
+                                placeholder="email@example.com"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </fieldset>
+
+                        <fieldset className="form-group mb-3" disabled={submitting}>
+                            <label htmlFor="password" className="form-label">Senha</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                className="form-control"
+                                placeholder="********"
+                                value={formData.password}
+                                onChange={handleChange}
+                                required
+                            />
+                        </fieldset>
+
+                        {error && <div className="alert alert-danger">{error}</div>}
+
+                        <div className="mt-3">
+                            <button type="submit" className="btn btn-success me-2" disabled={submitting}>
+                                {submitting ? 'Aguarde...' : 'Login'}
+                            </button>
+
+                            <button
+                                className="btn btn-light"
+                                onClick={() => navigate('/')}
+                                disabled={submitting}
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 };
