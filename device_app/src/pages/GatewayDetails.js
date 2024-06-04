@@ -24,7 +24,7 @@ const GatewayDetails = () => {
     <>
       <div>
         <h1>Detalhes do Gateway</h1>
-        <p>ID: {id}</p>
+        <p>ID: {gateway.gateway_id}</p>
         <p>Nome: {gateway.nome}</p>
         <p>Descrição: {gateway.descricao}</p>
         <p>Endereço: {gateway.endereco}</p>

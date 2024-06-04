@@ -24,6 +24,10 @@ const GatewayForm = ({ device = {}, onSubmit }) => {
         <input type="text" name="descricao" value={formData.descricao} onChange={handleChange} />
       </div>
       <div>
+        <label>Localização:</label>
+        <input type="text" name="localizacao" value={formData.localizacao} onChange={handleChange} />
+      </div>
+      <div>
         <label>Endereço:</label>
         <input type="text" name="endereco" value={formData.endereco} onChange={handleChange} />
       </div>

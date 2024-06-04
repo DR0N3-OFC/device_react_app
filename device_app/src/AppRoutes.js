@@ -6,6 +6,7 @@ import NotFound from "./pages/NotFound";
 import GatewayPage from "./pages/GatewayPage";
 import GatewayDetails from "./pages/GatewayDetails";
 import DeviceDetails from "./pages/DeviceDetails";
+import DevicePage from "./pages/DevicePage";
 
 
 const AppRoutes = () => {
@@ -16,6 +17,7 @@ const AppRoutes = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/gateways" element={<GatewayPage />} />
         <Route path="/gateway/:id" element={<GatewayDetails />} />
+        <Route path="/devices" element={<DevicePage />} />
         <Route path="/device/:id" element={<DeviceDetails />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

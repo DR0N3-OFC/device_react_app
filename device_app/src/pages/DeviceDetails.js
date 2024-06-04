@@ -8,7 +8,7 @@ const DeviceDetails = () => {
   const [device, setDevice] = useState([]);
 
   useEffect(() => {
-    // Faça uma solicitação para obter a lista de devices do servidor
+    // Faça uma solicitação para obter a lista de dispositivos do servidor
     axios.get(`${API}/dispositivo/${id}`)
       .then(response => {
         console.log(response.data)
@@ -25,6 +25,7 @@ const DeviceDetails = () => {
       <p>ID: {id}</p>
       <p>Nome: {device.nome}</p>
       <p>Descrição: {device.descricao}</p>
+      <p>Localização: {device.localizacao}</p>
       <p>Endereço: {device.endereco}</p>
     </div>
   );
