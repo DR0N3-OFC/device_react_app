@@ -5,13 +5,13 @@ import { API } from '../Const';
 
 const DeviceDetails = () => {
   const { id } = useParams();
-  const [device, setDevice] = useState([]);
+  const [device, setDevice] = useState({});
 
   useEffect(() => {
     // Faça uma solicitação para obter a lista de dispositivos do servidor
     axios.get(`${API}/dispositivo/${id}`)
       .then(response => {
-        console.log(response.data)
+        console.log(response.data);
         setDevice(response.data);
       })
       .catch(error => {
@@ -20,13 +20,19 @@ const DeviceDetails = () => {
   }, [id]);
 
   return (
-    <div>
-      <h1>Detalhes do Dispositivo</h1>
-      <p>ID: {id}</p>
-      <p>Nome: {device.nome}</p>
-      <p>Descrição: {device.descricao}</p>
-      <p>Localização: {device.localizacao}</p>
-      <p>Endereço: {device.endereco}</p>
+    <div className="container mt-4">
+      <div className="card">
+        <div className="card-header">
+          <h1>Detalhes do Dispositivo</h1>
+        </div>
+        <div className="card-body">
+          <p><strong>ID:</strong> {id}</p>
+          <p><strong>Nome:</strong> {device.nome}</p>
+          <p><strong>Descrição:</strong> {device.descricao}</p>
+          <p><strong>Localização:</strong> {device.localizacao}</p>
+          <p><strong>Endereço:</strong> {device.endereco}</p>
+        </div>
+      </div>
     </div>
   );
 };
