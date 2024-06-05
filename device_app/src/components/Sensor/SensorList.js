@@ -7,36 +7,47 @@ const SensorList = ({ id }) => {
   const [sensors, setSensors] = useState([]);
 
   useEffect(() => {
-    // Faça uma solicitação para obter a lista de sensores do servidor
-    if(id) {
-      axios.get(`${API}/dispositivo/${id}/sensores`, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('jwt')}`} })
-      .then(response => {
+    const fetchSensors = async () => {
+      try {
+        let response;
+        if (id) {
+          response = await axios.get(`${API}/dispositivo/${id}/sensores`, {
+            headers: { "Authorization": `Bearer ${sessionStorage.getItem('jwt')}` }
+          });
+        } else {
+          response = await axios.get(`${API}/sensor`, {
+            headers: { "Authorization": `Bearer ${sessionStorage.getItem('jwt')}` }
+          });
+        }
         setSensors(response.data);
-      })
-      .catch(error => {
-        console.error('Erro ao obter a lista de sensores do dispositivo:', error);
-      });
-    } else {
-      axios.get(`${API}/sensor`)
-      .then(response => {
-        setSensors(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Erro ao obter a lista de sensores:', error);
-      });
-    }
+      }
+    };
+
+    fetchSensors();
   }, [id]);
 
   return (
-    <div>
-      <h2>Lista de Sensores</h2>
-      <ul>
-        {sensors.map(sensor => (
-          <li key={sensor.sensor_id}>
-            <Link to={`/sensor/${sensor.sensor_id}`}><h3>{sensor.nome}</h3></Link>
-          </li>
-        ))}
-      </ul>
+    <div className="container mt-4">
+      <div className="card">
+        <div className="card-header">
+          <h2>Lista de Sensores</h2>
+        </div>
+        <div className="card-body">
+          <ul className="list-group">
+            {sensors.length > 0 ? sensors.map(sensor => (
+              <li key={sensor.sensor_id} className="list-group-item">
+                <Link to={`/sensor/${sensor.sensor_id}`}>
+                  <h3>{sensor.nome}</h3>
+                </Link>
+              </li>
+            )) : (
+              <li className="list-group-item">Ainda não existem sensores cadastrados.</li>
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
