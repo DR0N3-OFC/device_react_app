@@ -1,15 +1,17 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 import { API } from '../Const';
 
-const URL = `${API}/user`;
+const URL = `${API}/auth`;
 
 const LoginPage = () => {
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        email: '',
+        username: '',
         password: ''
     });
     const [submitting, setSubmitting] = useState(false);
@@ -26,9 +28,14 @@ const LoginPage = () => {
         
         try {
             const response = await axios.post(URL, formData);
-            console.log(response.data);
-            // Lógica de redirecionamento após o login bem-sucedido
-            navigate('/');
+
+            const token = response.data.token;
+            
+            if(token !== undefined){
+                login(token);
+            }
+
+            navigate('/devices');
         } catch (error) {
             console.error('Error during login:', error);
             setError('Erro ao fazer login. Por favor, verifique suas credenciais e tente novamente.');
@@ -46,14 +53,14 @@ const LoginPage = () => {
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
                         <fieldset className="form-group mb-3" disabled={submitting}>
-                            <label htmlFor="email" className="form-label">Email</label>
+                            <label htmlFor="username" className="form-label">Email</label>
                             <input
                                 type="email"
-                                id="email"
-                                name="email"
+                                id="username"
+                                name="username"
                                 className="form-control"
                                 placeholder="email@example.com"
-                                value={formData.email}
+                                value={formData.username}
                                 onChange={handleChange}
                                 required
                             />
@@ -89,6 +96,7 @@ const LoginPage = () => {
                             </button>
                         </div>
                     </form>
+                    <p className='card-text mt-3'>Não tem uma conta? <Link to="/register">Crie uma</Link></p>
                 </div>
             </div>
         </div>

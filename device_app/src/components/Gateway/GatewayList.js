@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API } from '../../Const';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const GatewayList = () => {
   const [gateways, setGateways] = useState([]);
-
+  const nav = useNavigate();
+  
   useEffect(() => {
     // Faça uma solicitação para obter a lista de gateways do servidor
-    axios.get(`${API}/gateway`)
+    axios.get(`${API}/gateway`, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('jwt')}`} })
       .then(response => {
         setGateways(response.data);
       })
       .catch(error => {
         console.error('Erro ao obter a lista de gateways:', error);
+        nav('/login');
       });
-  }, []);
+  }, [nav]);
 
   return (
     <div>

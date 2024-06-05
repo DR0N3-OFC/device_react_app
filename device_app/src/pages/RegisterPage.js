@@ -2,20 +2,20 @@ import axios from 'axios';
 import React, { useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../Const';
-
-const URL = `${API}/users`;
+import { useAuth } from '../AuthContext';
 
 const RegisterPage = () => {
   const nav = useNavigate();
+  const { login } = useAuth();
 
   const [submitting, setSubmitting] = useState(false);
 
   const formReducer = (state, event) => {
     if (event.reset) {
       return {
-        first_name: '',
-        last_name: '',
-        email: ''
+        nome: '',
+        email: '',
+        senha: ''
       }
     }
 
@@ -26,16 +26,15 @@ const RegisterPage = () => {
   }
 
   const [formData, setFormData] = useReducer(formReducer, {
-    first_name: '',
-    last_name: '',
-    email: ''
+    nome: '',
+    email: '',
+    senha: ''
   });
 
   const handleChange = event => {
-    const isCheckbox = event.target.type === 'checkbox';
     setFormData({
       name: event.target.name,
-      value: isCheckbox ? event.target.checked : event.target.value,
+      value: event.target.value,
     });
   }
 
@@ -43,15 +42,16 @@ const RegisterPage = () => {
     event.preventDefault();
     setSubmitting(true);
 
-    axios.post(URL, formData)
-      .then((res) => {
-        console.log(res);
+    axios.post(`${API}/pessoa`, formData)
+      .then((response) => {
         setFormData({ reset: true });
-        alert("Sucesso ao salvar!");
+
+        login(response.data.token);
+
+        nav('/login');
       })
       .catch(err => {
         console.log(err);
-        alert("Falha ao salvar!");
       })
       .finally(() => {
         setSubmitting(false);
@@ -67,35 +67,21 @@ const RegisterPage = () => {
         <div className="card-body">
           <form onSubmit={handleSave}>
             <fieldset className="form-group mb-3" disabled={submitting}>
-              <label htmlFor="first_name" className="form-label">Primeiro nome</label>
+              <label htmlFor="nome" className="form-label">Nome:</label>
               <input
                 type="text"
-                id="first_name"
-                name="first_name"
+                id="nome"
+                name="nome"
                 className="form-control"
                 placeholder="Fulano"
                 onChange={handleChange}
-                value={formData.first_name || ''}
+                value={formData.nome || ''}
                 required
               />
             </fieldset>
 
             <fieldset className="form-group mb-3" disabled={submitting}>
-              <label htmlFor="last_name" className="form-label">Sobrenome</label>
-              <input
-                type="text"
-                id="last_name"
-                name="last_name"
-                className="form-control"
-                placeholder="Silva"
-                onChange={handleChange}
-                value={formData.last_name || ''}
-                required
-              />
-            </fieldset>
-
-            <fieldset className="form-group mb-3" disabled={submitting}>
-              <label htmlFor="email" className="form-label">E-mail</label>
+              <label htmlFor="email" className="form-label">E-mail:</label>
               <input
                 type="email"
                 id="email"
@@ -104,6 +90,20 @@ const RegisterPage = () => {
                 placeholder="email@example.com"
                 onChange={handleChange}
                 value={formData.email || ''}
+                required
+              />
+            </fieldset>
+
+            <fieldset className="form-group mb-3" disabled={submitting}>
+              <label htmlFor="senha" className="form-label">Senha:</label>
+              <input
+                type="password"
+                id="senha"
+                name="senha"
+                className="form-control"
+                placeholder="********"
+                onChange={handleChange}
+                value={formData.senha || ''}
                 required
               />
             </fieldset>

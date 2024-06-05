@@ -1,11 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const GatewayForm = ({ device = {}, onSubmit }) => {
-  const [formData, setFormData] = useState(device);
+const DeviceForm = ({ device = {}, onSubmit }) => {
+  const [formData, setFormData] = useState({
+    nome: '',
+    descricao: '',
+    localizacao: '',
+    endereco: '',
+    gateway: {
+      gateway_id: ''
+    }
+  });
+
+  useEffect(() => {
+    if (device.dispositivo_id) {
+      setFormData({
+        ...formData,
+        nome: device.nome || '',
+        descricao: device.descricao || '',
+        localizacao: device.localizacao || '',
+        endereco: device.endereco || '',
+        gateway: {
+          gateway_id: device.gateway ? device.gateway.gateway_id || '' : ''
+        }
+      });
+    }
+  }, [device, formData]);
 
   const handleChange = event => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    // Se o campo pertencer ao objeto gateway, atualize o estado de formData aninhando o campo
+    if (name.startsWith("gateway.")) {
+      setFormData(prevState => ({
+        ...prevState,
+        gateway: {
+          ...prevState.gateway,
+          [name.split(".")[1]]: value
+        }
+      }));
+    } else {
+      // Caso contrário, atualize o estado de formData normalmente
+      setFormData(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = event => {
@@ -59,10 +97,20 @@ const GatewayForm = ({ device = {}, onSubmit }) => {
           onChange={handleChange} 
         />
       </div>
-      {/* Outros campos do device */}
+      <div className="mb-3">
+        <label htmlFor="gateway_id" className="form-label">Gateway (ID):</label>
+        <input 
+          type="number" 
+          id="gateway_id" 
+          name="gateway.gateway_id" // Defina o nome como "gateway.gateway_id"
+          className="form-control" 
+          value={formData.gateway.gateway_id} 
+          onChange={handleChange} 
+        />
+      </div>
       <button type="submit" className="btn btn-primary">Salvar</button>
     </form>
   );
 };
 
-export default GatewayForm;
+export default DeviceForm;

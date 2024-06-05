@@ -1,21 +1,22 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { API } from '../Const';
 
 const Chart = () => {
-  const data = [
-    { name: 'Jan', value: 400 },
-    { name: 'Feb', value: 300 },
-    { name: 'Mar', value: 200 },
-    { name: 'Apr', value: 278 },
-    { name: 'May', value: 189 },
-    { name: 'Jun', value: 239 },
-    { name: 'Jul', value: 349 },
-    { name: 'Aug', value: 200 },
-    { name: 'Sep', value: 300 },
-    { name: 'Oct', value: 250 },
-    { name: 'Nov', value: 210 },
-    { name: 'Dec', value: 240 },
-  ];
+  const [data, setData] = useState({});
+  console.log(sessionStorage.getItem('jwt'));
+  useEffect(() => {
+    // Faça uma solicitação para obter os detalhes do gateway do servidor
+    axios.get(`${API}/medicao`, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('jwt')}`} })
+      .then(response => {
+        setData(response.data);
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error('Erro ao obter as medicoes:', error);
+      });
+  }, []);
 
   return (
     <ResponsiveContainer width="100%" height={400}>
@@ -24,11 +25,11 @@ const Chart = () => {
         margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="nome" />
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="valor" stroke="#8884d8" activeDot={{ r: 8 }} />
       </LineChart>
     </ResponsiveContainer>
   );

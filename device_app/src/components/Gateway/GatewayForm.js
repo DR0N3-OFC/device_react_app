@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const GatewayForm = ({ gateway = {}, onSubmit }) => {
-  const [formData, setFormData] = useState(gateway);
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    if(gateway.gateway_id){
+      setFormData(gateway);
+    }
+  }, [gateway]);
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -48,7 +54,6 @@ const GatewayForm = ({ gateway = {}, onSubmit }) => {
           onChange={handleChange} 
         />
       </div>
-      {/* Outros campos do gateway */}
       <button type="submit" className="btn btn-primary">Salvar</button>
     </form>
   );

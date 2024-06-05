@@ -9,7 +9,7 @@ const SensorList = ({ id }) => {
   useEffect(() => {
     // Faça uma solicitação para obter a lista de sensores do servidor
     if(id) {
-      axios.get(`${API}/dispositivo/${id}/sensores`)
+      axios.get(`${API}/dispositivo/${id}/sensores`, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('jwt')}`} })
       .then(response => {
         setSensors(response.data);
       })

@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../AuthContext';
 
 const Navbar = () => {
+  const { loggedIn, logout } = useAuth();
+
   return (
     <nav className='navbar navbar-expand-lg bg-body-tertiary'>
       <div className="container-fluid">
@@ -18,7 +21,18 @@ const Navbar = () => {
               <Link className='nav-link active' to="/gateways">Gateways</Link>
             </li>
             <li className='nav-item'>
-              <Link className='nav-link active' to="/login">Login</Link>
+              {!loggedIn ? (
+                <Link className='nav-link active' to="/login">Login</Link>
+              ) : (
+                <Link
+                  to="/"
+                  className='nav-link active'
+                  style={{ textDecoration: 'none', color: 'black' }}
+                  onClick={logout}
+                >
+                  Logout
+                </Link>
+              )}
             </li>
           </ul>
         </div>

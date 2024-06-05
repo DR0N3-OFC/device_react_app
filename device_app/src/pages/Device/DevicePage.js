@@ -1,17 +1,15 @@
-import React from 'react';
-import DeviceList from '../../components/Device/DeviceList';
-import DeviceForm from '../../components/Device/DeviceForm';
 import axios from 'axios';
+import React from 'react';
 import { API } from '../../Const';
+import DeviceForm from '../../components/Device/DeviceForm';
+import DeviceList from '../../components/Device/DeviceList';
 
 const DevicePage = () => {
   const handleSubmit = formData => {
-    // Enviar dados do formulário para o servidor para cadastrar ou editar um gateway
-    axios.post(`${API}/dispositivo`, formData)
+    axios.post(`${API}/dispositivo`, formData, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('jwt')}`} })
       .then(response => {
         console.log('Dispositivo cadastrado/editado com sucesso:', response.data);
-        // Atualizar a lista de gateways
-        // Você pode redirecionar para a lista de gateways ou fazer outra coisa após o sucesso
+        window.location.reload();
       })
       .catch(error => {
         console.error('Erro ao cadastrar/editar gateway:', error);

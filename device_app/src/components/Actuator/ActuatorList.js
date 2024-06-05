@@ -9,7 +9,7 @@ const ActuatorList = ({id}) => {
   useEffect(() => {
     // Faça uma solicitação para obter a lista de actuators do servidor
     if(id) {
-      axios.get(`${API}/dispositivo/${id}/atuadores`)
+      axios.get(`${API}/dispositivo/${id}/atuadores`, { headers: {"Authorization" : `Bearer ${sessionStorage.getItem('jwt')}`} })
       .then(response => {
         setActuators(response.data);
       })
