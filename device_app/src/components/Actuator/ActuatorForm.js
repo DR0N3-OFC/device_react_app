@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const ActuatorForm = ({ actuator = {}, onSubmit, device = {} }) => {
   const [formData, setFormData] = useState({
-    ...actuator, 
+    ...actuator,
     nome: actuator.nome || '',
     dispositivo: {
       dispositivo_id: device.dispositivo_id || ''
@@ -32,17 +32,42 @@ const ActuatorForm = ({ actuator = {}, onSubmit, device = {} }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Nome:</label>
-        <input type="text" name="nome" value={formData.nome} onChange={handleChange} />
+    <div className="container mt-4">
+      <div className="card">
+        <div className="card-header">
+          <h2>Formulário do Atuador</h2>
+        </div>
+        <div className="card-body">
+          <form onSubmit={handleSubmit}>
+            <fieldset className="form-group mb-3">
+              <label htmlFor="nome" className="form-label">Nome</label>
+              <input
+                type="text"
+                id="nome"
+                name="nome"
+                className="form-control"
+                value={formData.nome}
+                onChange={handleChange}
+                required
+              />
+            </fieldset>
+            <input
+              type="hidden"
+              name="dispositivo_id"
+              value={formData.dispositivo.dispositivo_id}
+              onChange={handleChange}
+              readOnly
+            />
+            {/* Outros campos do atuador podem ser adicionados aqui */}
+            <div className="mt-3">
+              <button type="submit" className="btn btn-success me-2">
+                <i className="fas fa-check-circle"></i> Salvar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      <div>
-        <input type="" name="dispositivo_id" value={formData.dispositivo.dispositivo_id} onChange={handleChange} readOnly hidden/>
-      </div>
-      {/* Outros campos do device */}
-      <button type="submit">Salvar</button>
-    </form>
+    </div>
   );
 };
 
