@@ -28,7 +28,7 @@ const LoginPage = () => {
         
         try {
             const response = await axios.post(URL, formData);
-
+            
             const token = response.data.token;
             
             if(token !== undefined){

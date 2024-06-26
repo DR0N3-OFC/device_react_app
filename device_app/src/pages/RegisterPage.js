@@ -47,7 +47,7 @@ const RegisterPage = () => {
         setFormData({ reset: true });
 
         login(response.data.token);
-
+        console.log(response.data.token)
         nav('/login');
       })
       .catch(err => {
