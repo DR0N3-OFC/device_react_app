@@ -43,16 +43,16 @@ pipeline {
                         '''
                     } else {
                         bat '''
-                            for /f "tokens=*" %i in ('docker ps -a -q -f name=react') do set DOCKER_CONTAINER=%i
-                            if defined DOCKER_CONTAINER (
+                            docker ps -a -q -f name=react > nul
+                            if %ERRORLEVEL% == 0 (
                                 echo "Removing container 'react'..."
-                                docker rm -f 'react'
+                                docker rm -f react
                             ) else (
                                 echo "Container 'react' does not exist."
                             )
                             
-                            for /f "tokens=*" %i in ('docker images -q react:latest') do set DOCKER_IMAGE=%i
-                            if defined DOCKER_IMAGE (
+                            docker images -q react:latest > nul
+                            if %ERRORLEVEL% == 0 (
                                 echo "Removing image 'react:latest'..."
                                 docker rmi -f react:latest
                             ) else (
