@@ -1,59 +1,107 @@
 pipeline {
-  agent any
-  stages {
-    stage("setup environment") {
-      steps {
-        sh '''
-          docker version
-          docker-compose version
-          docker info
-          curl --version
-        '''
-      }
+    agent any
+    stages {
+        stage("setup environment") {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh '''
+                            docker version
+                            docker-compose version
+                            docker info
+                            curl --version
+                        '''
+                    } else {
+                        bat '''
+                            docker version
+                            docker-compose version
+                            docker info
+                            curl --version
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Prune Docker data') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh '''
+                            if [ $(docker ps -a -q -f name=react) ]; then
+                                echo "Removing container 'react'..."
+                                docker rm -f 'react'
+                            else
+                                echo "Container 'react' does not exist."
+                            fi
+                            
+                            if [ $(docker images -q react:latest) ]; then
+                                echo "Removing image 'react:latest'..."
+                                docker rmi -f react:latest
+                            else
+                                echo "Image 'react:latest' does not exist."
+                            fi
+                        '''
+                    } else {
+                        bat '''
+                            for /f "tokens=*" %i in ('docker ps -a -q -f name=react') do set DOCKER_CONTAINER=%i
+                            if defined DOCKER_CONTAINER (
+                                echo "Removing container 'react'..."
+                                docker rm -f 'react'
+                            ) else (
+                                echo "Container 'react' does not exist."
+                            )
+                            
+                            for /f "tokens=*" %i in ('docker images -q react:latest') do set DOCKER_IMAGE=%i
+                            if defined DOCKER_IMAGE (
+                                echo "Removing image 'react:latest'..."
+                                docker rmi -f react:latest
+                            ) else (
+                                echo "Image 'react:latest' does not exist."
+                            )
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Start container') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh '''
+                            cd device_app
+                            
+                            docker build -t react:latest .
+                            
+                            docker run -d \
+                            -p 3001:3001 \
+                            --name react \
+                            -e REACT_APP_RABBITMQ_PORT=3002 \
+                            -e PORT=3001 \
+                            react:latest
+                            
+                            docker ps
+                        '''
+                    } else {
+                        bat '''
+                            cd device_app
+                            
+                            docker build -t react:latest .
+                            
+                            docker run -d ^
+                            -p 3001:3001 ^
+                            --name react ^
+                            -e REACT_APP_RABBITMQ_PORT=3002 ^
+                            -e PORT=3001 ^
+                            react:latest
+                            
+                            docker ps
+                        '''
+                    }
+                }
+            }
+        }
     }
-    stage('Prune Docker data') {
-      steps {
-          // Check if the container exists
-          sh """
-          if [ \$(docker ps -a -q -f name=react) ]; then
-              echo "Removing container 'react'..."
-              docker rm -f 'react'
-          else
-              echo "Container 'react' does not exist."
-          fi
-          """
-  
-          // Check if the image exists
-          sh """
-          if [ \$(docker images -q react:latest) ]; then
-              echo "Removing image 'react:latest'..."
-              docker rmi -f react:latest
-          else
-              echo "Image 'react:latest' does not exist."
-          fi
-          """
-      }
-    }
-    stage('Start container') {
-      steps {
-        sh '''
-          cd device_app
-          
-          docker build -t react:latest .
-          
-          docker run -d \
-          -p 3001:3001 \
-          --name react \
-          -e REACT_APP_RABBITMQ_PORT=3002 \
-          -e PORT=3001 \
-          react:latest
-          
-          docker ps
-        '''
-      }
-    }
-  }
-  post {
+    post {
         success {
             emailext body: "Build ${currentBuild.fullDisplayName} succeeded",
                      subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - Successful",
