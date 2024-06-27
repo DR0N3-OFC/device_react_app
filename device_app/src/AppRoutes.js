@@ -9,7 +9,7 @@ import DeviceDetails from "./pages/Device/DeviceDetails";
 import DevicePage from "./pages/Device/DevicePage";
 import DeviceEditPage from "./pages/Device/DeviceEditPage";
 import GatewayEditPage from "./pages/Gateway/GatewayEditPage";
-
+import MessagesPage from "./pages/MessagesPage";
 
 const AppRoutes = () => {
   return (
@@ -23,6 +23,7 @@ const AppRoutes = () => {
         <Route path="/devices" element={<DevicePage />} />
         <Route path="/device/:id" element={<DeviceDetails />} />
         <Route path="/device/:id/edit" element={<DeviceEditPage />} />
+        <Route path="/messages" element={<MessagesPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
   );

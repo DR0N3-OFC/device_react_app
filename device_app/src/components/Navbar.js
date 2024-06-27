@@ -21,6 +21,9 @@ const Navbar = () => {
               <Link className='nav-link active' to="/gateways">Gateways</Link>
             </li>
             <li className='nav-item'>
+              <Link className='nav-link active' to="/messages">Mensagens</Link>
+            </li>
+            <li className='nav-item'>
               {!loggedIn ? (
                 <Link className='nav-link active' to="/login">Login</Link>
               ) : (
