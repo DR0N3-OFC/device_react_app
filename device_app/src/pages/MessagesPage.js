@@ -10,9 +10,9 @@ const Messages = () => {
 
     useEffect(() => {
        if (!loggedIn) {
-           nav('/login');
+           navigate('/login');
        }
-    }, [loggedIn, nav]);
+    }, [loggedIn, navigate]);
 
     useEffect(() => {
         async function fetchMessages() {
