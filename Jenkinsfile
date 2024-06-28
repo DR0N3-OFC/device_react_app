@@ -75,6 +75,7 @@ pipeline {
                             docker run -d \
                             -p 3001:3001 \
                             --name react \
+                            --network tac_default \
                             -e REACT_APP_RABBITMQ_PORT=3002 \
                             -e PORT=3001 \
                             react:latest
@@ -90,6 +91,7 @@ pipeline {
                             docker run -d ^
                             -p 3001:3001 ^
                             --name react ^
+                            --network tac_default ^
                             -e REACT_APP_RABBITMQ_PORT=3002 ^
                             -e PORT=3001 ^
                             react:latest
